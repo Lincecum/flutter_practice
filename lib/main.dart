@@ -29,6 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int cnt = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,10 +37,31 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text('홈'),
         ),
         body: Center(
-          child: Text(
-            '0',
-            style: TextStyle(color: Colors.red, fontSize: 70),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Number',
+                style: TextStyle(color: Colors.black, fontSize: 40),
+              ),
+              Text(
+                '$cnt',
+                style: TextStyle(color: Colors.red, fontSize: 70),
+              ),
+              ElevatedButton(onPressed: () {print('ElevatedButton');}, child: Text('ElevatedButton'),),
+              TextButton(onPressed: () {print('TextButton');}, child: Text('TextButton'),),
+            ],
           ),
-        ));
+        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // 화면 갱신
+          setState(() {
+            cnt ++;
+          });
+        },
+        child: Icon(Icons.add),
+      ),
+    );
   }
 }
