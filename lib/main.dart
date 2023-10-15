@@ -1,3 +1,4 @@
+import 'package:first_fultter_project/ios_style_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'my_home_page.dart';
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.brown
       ),
-      home: const MyHomePage(),
+      // home: const MyHomePage(),
+      home : const ios_style_screen()
     );
   }
 }
