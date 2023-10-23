@@ -1,3 +1,5 @@
+
+import 'package:bmi_calculator/result/result_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -20,6 +22,7 @@ class _MainScreenState extends State<MainScreen> {
         child: Form(
           key : _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextFormField(
                 decoration: const InputDecoration(
@@ -36,11 +39,16 @@ class _MainScreenState extends State<MainScreen> {
               ),
               ElevatedButton(onPressed: () {
                 if (_formKey.currentState?.validate() ?? false){
-
+                  return;
                 }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ResultScreen(
+                      height: 185, weight: 88,))
+                );
               }, child: const Text('결과')),
 
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -48,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 keyboardType: TextInputType.number,
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               ElevatedButton(onPressed: () {
                 if (_formKey.currentState?.validate() ?? false){
 
