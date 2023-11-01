@@ -6,10 +6,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 추가
   await dotenv.load(fileName: ".env");
-
   runApp(const MyApp());
 }
 
@@ -33,15 +32,17 @@ class GpsMapApp extends StatefulWidget {
 }
 
 class GpsMapAppState extends State<GpsMapApp> {
-  final Completer<GoogleMapController> _controller =
-  Completer<GoogleMapController>();
+  final Completer<GoogleMapController> _controller = Completer();
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  // static const CameraPosition _kGooglePlex = CameraPosition(
+  //   target: LatLng(37.42796133580664, -122.085749655962),
+  //   zoom: 14.4746,
+  // );
 
   CameraPosition? _initalCameraPosition;
+  int _polylineIdCounter = 0;
+  Set<Polyline> _polylines = {};
+  LatLng? _prevPosition;
 
   // static const CameraPosition _kLake = CameraPosition(
   //     bearing: 192.8334901395799,
@@ -57,37 +58,65 @@ class GpsMapAppState extends State<GpsMapApp> {
 
   Future init() async {
     final position = await _determinePosition();
-    _initalCameraPosition = CameraPosition(target: LatLng(position.latitude,position.longitude),zoom:10);
-    print(position.toString());
+    _initalCameraPosition = CameraPosition(
+      target: LatLng(position.latitude, position.longitude),
+      zoom: 10,
+    );
+    // print(position.toString());
+    setState(() {});
+
+    const locationSettings = LocationSettings();
+    Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((Position position) {
+      _polylineIdCounter++;
+      final polylineId = PolylineId('$_polylineIdCounter');
+      final polyline = Polyline(
+        polylineId: polylineId,
+        color: Colors.lightBlue,
+        width: 3,
+        points: [
+          _prevPosition ?? _initalCameraPosition!.target,
+          LatLng(position.latitude, position.longitude),
+        ],
+      );
+      setState(() {
+        _polylines.add(polyline);
+        _prevPosition = LatLng(position.latitude, position.longitude);
+      });
+
+      _moveCamera(position);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _initalCameraPosition ==null
-      ? Center(child: CircularProgressIndicator())
-      : GoogleMap(
-        mapType: MapType.hybrid,
-        initialCameraPosition: _initalCameraPosition!,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: const Text('To the lake!'),
-        icon: const Icon(Icons.directions_boat),
-      ),
+      body: _initalCameraPosition == null
+          ? const Center(child: CircularProgressIndicator())
+          : GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: _initalCameraPosition!,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+              polylines: _polylines,
+            ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: _moveCamera,
+      //   label: const Text('To the lake!'),
+      //   icon: const Icon(Icons.directions_boat),
+      // ),
     );
   }
 
-  Future<void> _goToTheLake() async {
+  // former go tothelake
+  Future<void> _moveCamera(Position position) async {
     final GoogleMapController controller = await _controller.future;
-    final position = await Geolocator.getCurrentPosition();
-
-    final cameraPosition =
-    CameraPosition(
-      target: LatLng(position.latitude, position.longitude), zoom: 20,);
+    // final position = await Geolocator.getCurrentPosition();
+    final cameraPosition = CameraPosition(
+      target: LatLng(position.latitude, position.longitude),
+      zoom: 20,
+    );
     controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
