@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clone_instagram/src/components/image_data.dart';
+import 'package:get/get.dart';
 
-class App extends StatelessWidget {
+import 'controller/bottom_nav_controller.dart';
+
+class App extends GetView<BottomNavController> {
   const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(
+          backgroundColor: Colors.red,
           appBar: AppBar(),
           body: Container(),
           bottomNavigationBar: BottomNavigationBar(
