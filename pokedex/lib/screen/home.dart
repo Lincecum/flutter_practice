@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:pokedex/model/PokeModel.dart';
+import 'package:pokedex/model/poke_model.dart';
 
 import '../API/pokeapi.dart';
 import '../widget/pocketmon_grid.dart';
@@ -44,6 +44,7 @@ class _HomeState extends State<Home> {
       ),
       body: PokemonGrid(pokemon: pokemon),
       floatingActionButton: FloatingActionButton(
+        heroTag: "fab",
         onPressed: () {},
         tooltip: 'Share',
         child: const Icon(

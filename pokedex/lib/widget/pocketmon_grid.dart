@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/model/PokeModel.dart';
+import 'package:pokedex/model/poke_model.dart';
 import 'package:pokedex/widget/poketmon_card.dart';
 class PokemonGrid extends StatefulWidget {
   final List<Pokemon> pokemon;

@@ -1,29 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/screen/details.dart';
 class PokemonCardData extends StatelessWidget {
+  final int id;
   final String image;
   final String name;
+
   const PokemonCardData({
     Key? key,
+    required this.id,
     required this.name,
     required this.image,
   }) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          child: Image.network(
-            image,
-            fit: BoxFit.contain,
+          child: Padding(
+            padding: const EdgeInsets.all(11),
+            child: Hero(
+              tag: "image-$id",
+              child: Image.network(
+                image,
+                fit: BoxFit.contain,
+                alignment: Alignment.bottomRight,
+              ),
+            ),
           ),
         ),
         const Divider(),
-        Text(
-          "${name[0].toUpperCase()}${name.substring(1)}",
-          style: const TextStyle(
-            fontSize: 21,
-            color: Colors.black87,
+        Hero(
+          tag: "name-$id",
+          child: Material(
+            color: Colors.white,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(21),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                "${name[0].toUpperCase()}${name.substring(1)}",
+                style: const TextStyle(
+                  fontSize: 21,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
           ),
         ),
       ],
