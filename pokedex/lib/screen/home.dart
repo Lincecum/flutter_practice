@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/model/poke_model.dart';
 
 import '../API/pokeapi.dart';
+import '../widget/home_app_bar.dart';
 import '../widget/pocketmon_grid.dart';
 
 class Home extends StatefulWidget {
@@ -42,7 +43,14 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text("Pokedex"),
       ),
-      body: PokemonGrid(pokemon: pokemon),
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+          slivers:[
+            const HomeAppBar(),
+            const SliverPadding(padding: EdgeInsets.all(4)),
+            PokemonGrid(pokemon: pokemon)
+          ],
+         ),
       floatingActionButton: FloatingActionButton(
         heroTag: "fab",
         onPressed: () {},
