@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/screen/details.dart';
 import 'package:pokedex/screen/home.dart';
+import 'package:pokedex/screen/splash.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => const Home(),
+        "/": (context) => const SplashScreen(), // Home is the default route
+        "/home": (context) => const Home(),
         "/details": (context) => const Details(),
       },
     );
