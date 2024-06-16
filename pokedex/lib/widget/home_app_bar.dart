@@ -14,7 +14,7 @@ class HomeAppBar extends StatelessWidget {
       ),
       flexibleSpace: FlexibleSpaceBar(
         background: Image.asset(
-          "assets/images/logo.jpeg",
+          "assets/images/logo.jpg",
           fit: BoxFit.cover,
         ),
         collapseMode: CollapseMode.parallax,

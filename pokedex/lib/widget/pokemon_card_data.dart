@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/screen/details.dart';
+import 'package:transparent_image/transparent_image.dart';
+
 class PokemonCardData extends StatelessWidget {
   final int id;
   final String image;
@@ -23,8 +25,10 @@ class PokemonCardData extends StatelessWidget {
             padding: const EdgeInsets.all(11),
             child: Hero(
               tag: "image-$id",
-              child: Image.network(
-                image,
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: image,
+                fadeInCurve: Curves.easeInOut,
                 fit: BoxFit.contain,
                 alignment: Alignment.bottomRight,
               ),
