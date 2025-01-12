@@ -1,5 +1,7 @@
+import 'package:carrot_market_sample/pages/deatil.dart';
+import 'package:carrot_market_sample/repository/contents_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
@@ -10,207 +12,37 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Map<String, String>> datas = [];
-  int _currentPageIndex=0;
+  // List<Map<String, String>> datas = [];
+  String currentLocation= "아라동";
+  ContentsRepository contentsRepository = ContentsRepository();
+  final Map<String, String> locationTypeToString = {
+    "ara" : "아라동",
+    "ora" : "오라동",
+    "donam" : "도남동",
+  };
+  int _currentPageIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _currentPageIndex =0;
-    datas = [
-      {
-        "image": "assets/images/1.jpg",
-        "title": "네메시스 축구화275",
-        "location": "제주 제주시 아라동",
-        "price": "30000",
-        "likes": "2"
-      },
-      {
-        "image": "assets/images/2.jpg",
-        "title": "LA갈비 5kg팔아요~",
-        "location": "제주 제주시 아라동",
-        "price": "100000",
-        "likes": "5"
-      },
-      {
-        "image": "assets/images/3.jpg",
-        "title": "치약팝니다",
-        "location": "제주 제주시 아라동",
-        "price": "5000",
-        "likes": "0"
-      },
-      {
-        "image": "assets/images/4.jpg",
-        "title": "토끼 팝니다",
-        "location": "전남 순천 연향동",
-        "price": "500000",
-        "likes": "50"
-      },
-    ];
-    // "ara": [
-    // {
-    // "cid": "1",
-    // "image": "assets/images/ara-1.jpg",
-    // "title": "네메시스 축구화275",
-    // "location": "제주 제주시 아라동",
-    // "price": "30000",
-    // "likes": "2"
-    // },
-    // {
-    // "cid": "2",
-    // "image": "assets/images/ara-2.jpg",
-    // "title": "LA갈비 5kg팔아요~",
-    // "location": "제주 제주시 아라동",
-    // "price": "100000",
-    // "likes": "5"
-    // },
-    // {
-    // "cid": "3",
-    // "image": "assets/images/ara-3.jpg",
-    // "title": "치약팝니다",
-    // "location": "제주 제주시 아라동",
-    // "price": "5000",
-    // "likes": "0"
-    // },
-    // {
-    // "cid": "4",
-    // "image": "assets/images/ara-4.jpg",
-    // "title": "[풀박스]맥북프로16인치 터치바 스페이스그레이",
-    // "location": "제주 제주시 아라동",
-    // "price": "2500000",
-    // "likes": "6"
-    // },
-    // {
-    // "cid": "5",
-    // "image": "assets/images/ara-5.jpg",
-    // "title": "디월트존기임팩",
-    // "location": "제주 제주시 아라동",
-    // "price": "150000",
-    // "likes": "2"
-    // },
-    // {
-    // "cid": "6",
-    // "image": "assets/images/ara-6.jpg",
-    // "title": "갤럭시s10",
-    // "location": "제주 제주시 아라동",
-    // "price": "180000",
-    // "likes": "2"
-    // },
-    // {
-    // "cid": "7",
-    // "image": "assets/images/ara-7.jpg",
-    // "title": "선반",
-    // "location": "제주 제주시 아라동",
-    // "price": "15000",
-    // "likes": "2"
-    // },
-    // {
-    // "cid": "8",
-    // "image": "assets/images/ara-8.jpg",
-    // "title": "냉장 쇼케이스",
-    // "location": "제주 제주시 아라동",
-    // "price": "80000",
-    // "likes": "3"
-    // },
-    // {
-    // "cid": "9",
-    // "image": "assets/images/ara-9.jpg",
-    // "title": "대우 미니냉장고",
-    // "location": "제주 제주시 아라동",
-    // "price": "30000",
-    // "likes": "3"
-    // },
-    // {
-    // "cid": "10",
-    // "image": "assets/images/ara-10.jpg",
-    // "title": "멜킨스 풀업 턱걸이 판매합니다.",
-    // "location": "제주 제주시 아라동",
-    // "price": "50000",
-    // "likes": "7"
-    // },
-    // ],
-    // "ora": [
-    // {
-    // "cid": "11",
-    // "image": "assets/images/ora-1.jpg",
-    // "title": "LG 통돌이세탁기 15kg(내부",
-    // "location": "제주 제주시 오라동",
-    // "price": "150000",
-    // "likes": "13"
-    // },
-    // {
-    // "cid": "12",
-    // "image": "assets/images/ora-2.jpg",
-    // "title": "3단책장 전면책장 가져가실분",
-    // "location": "제주 제주시 오라동",
-    // "price": "무료나눔",
-    // "likes": "6"
-    // },
-    // {
-    // "cid": "13",
-    // "image": "assets/images/ora-3.jpg",
-    // "title": "브리츠 컴퓨터용 스피커",
-    // "location": "제주 제주시 오라동",
-    // "price": "1000",
-    // "likes": "4"
-    // },
-    // {
-    // "cid": "14",
-    // "image": "assets/images/ora-4.jpg",
-    // "title": "안락 의자",
-    // "location": "제주 제주시 오라동",
-    // "price": "10000",
-    // "likes": "1"
-    // },
-    // {
-    // "cid": "15",
-    // "image": "assets/images/ora-5.jpg",
-    // "title": "어린이책 무료드림",
-    // "location": "제주 제주시 오라동",
-    // "price": "무료나눔",
-    // "likes": "1"
-    // },
-    // {
-    // "cid": "16",
-    // "image": "assets/images/ora-6.jpg",
-    // "title": "어린이책 무료드림",
-    // "location": "제주 제주시 오라동",
-    // "price": "무료나눔",
-    // "likes": "0"
-    // },
-    // {
-    // "cid": "17",
-    // "image": "assets/images/ora-7.jpg",
-    // "title": "칼세트 재제품 팝니다",
-    // "location": "제주 제주시 오라동",
-    // "price": "20000",
-    // "likes": "5"
-    // },
-    // {
-    // "cid": "18",
-    // "image": "assets/images/ora-8.jpg",
-    // "title": "아이팜장난감정리함팔아요",
-    // "location": "제주 제주시 오라동",
-    // "price": "30000",
-    // "likes": "29"
-    // },
-    // {
-    // "cid": "19",
-    // "image": "assets/images/ora-9.jpg",
-    // "title": "한색책상책장수납장세트 팝니다.",
-    // "location": "제주 제주시 오라동",
-    // "price": "1500000",
-    // "likes": "1"
-    // },
-    // {
-    // "cid": "20",
-    // "image": "assets/images/ora-10.jpg",
-    // "title": "순성 데일리 오가닉 카시트",
-    // "location": "제주 제주시 오라동",
-    // "price": "60000",
-    // "likes": "8"
-    // },
-    // ];
+    currentLocation = "아라동";
+    contentsRepository = ContentsRepository();
+    _currentPageIndex = 0;
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    currentLocation = "도남동";
+    contentsRepository = ContentsRepository();
+  }
+
+  final oCcy = new NumberFormat("#,###", "ko_KR");
+
+  String calcStringToWon(String priceString) {
+    if (priceString == "무료나눔") return priceString;
+    return "${oCcy.format(int.parse(priceString))}원";
   }
 
   PreferredSizeWidget _appbarWidget() {
@@ -224,13 +56,33 @@ class _HomeState extends State<Home> {
         // onLongPress: (){
         //   print("long pressed")
         // },
-        child: Row(
-          children: [
-            Text(
-              "중동",
-            ),
-            Icon(Icons.arrow_drop_down),
-          ],
+        child: PopupMenuButton<String>(
+          offset: Offset(0,30),
+          shape: ShapeBorder.lerp(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              1),
+          onSelected: (String where) {
+            print(where);
+            setState(() {
+              currentLocation = where;
+            });
+          },
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem(value: "ara", child: Text("아라동")),
+              PopupMenuItem(value: "ora", child: Text("오라동")),
+              PopupMenuItem(value: "donam", child: Text("도남동")),
+            ];
+          },
+          child: Row(
+            children: [
+              Text(
+                locationTypeToString[currentLocation] ?? "위치 없음",
+              ),
+              Icon(Icons.arrow_drop_down),
+            ],
+          ),
         ),
       ),
       elevation: 1,
@@ -247,110 +99,111 @@ class _HomeState extends State<Home> {
     );
   }
 
-  final oCcy = new NumberFormat("#,###", "ko_KR");
-  String calcStringToWon(String priceString) {
-    return "${oCcy.format(int.parse(priceString))}원";
-  }
-
-  Widget _bodyWidget() {
+  Widget _makeDataList(List<Map<String,String>> datas) {
     return ListView.separated(
-      // 아이템 사이사이
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 11),
       itemBuilder: (BuildContext _context, int index) {
-        return Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  child: Image.asset(
-                    datas[index]["image"].toString(),
-                    width: 100,
-                    height: 100,
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    height: 100,
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          datas[index]["title"]!,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 15),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          datas[index]["location"]!,
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black.withOpacity(0.3)),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                            calcStringToWon(datas[index]["price"]!),
-                            style: TextStyle(fontWeight: FontWeight.w500)),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              SvgPicture.asset(
-                                "assets/svg/heart_off.svg",
-                                width: 13,
-                                height: 13,
-                              ),
-                              SizedBox(width: 5),
-                              Text(datas[index]["likes"]!),
-                            ],
-                          ),
-                        ),
-                      ],
+        return GestureDetector(
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+              return DetailContentView(
+                data: datas[index],
+              );
+            }));
+            print(datas[index]["title"]);
+          },
+          child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 11),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    child: Hero(
+                      tag: datas[index]["cid"]!,
+                      child: Image.asset(
+                        datas[index]["image"]!,
+                        width: 100,
+                        height: 100,
+                      ),
                     ),
                   ),
-                )
-              ],
-            ));
+                  Expanded(
+                    child: Container(
+                      height: 100,
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            datas[index]["title"]!,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            datas[index]["location"]!,
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black.withOpacity(0.3)),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(calcStringToWon(datas[index]["price"]!),
+                              style: TextStyle(fontWeight: FontWeight.w500)),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/svg/heart_off.svg",
+                                  width: 13,
+                                  height: 13,
+                                ),
+                                SizedBox(width: 5),
+                                Text(datas[index]["likes"]!),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              )),
+        );
       },
       separatorBuilder: (BuildContext _context, int index) {
         return Container(height: 1, color: Colors.black);
       },
-      itemCount: 4,
+      itemCount: datas.length, // itemcount를 데이터의 길이에 맞게 설정
     );
   }
-  BottomNavigationBarItem _bottomNavigationBarItem(String iconName, String label){
-    return BottomNavigationBarItem(icon: Padding(
-      padding: const EdgeInsets.only(bottom: 5),
-      child: SvgPicture.asset("assets/svg/${iconName}_off.svg", width: 22,),
-    ), label: "${label}");
+  Future<List<Map<String, String>>> _loadContent() async {
+    // ContentsRepository의 메서드가 Future로 데이터를 반환해야 함
+    return await contentsRepository.loadContentsFromLocation(currentLocation);
   }
 
+  Widget _bodyWidget() {
+    return FutureBuilder(
+        future: _loadContent(),
+        builder: (BuildContext context, dynamic snapshot){
+          if(snapshot.connectionState != ConnectionState.done){
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.error == "Exception") { // snapshot.hasError로 하면 예외처리 안돼서 옆과 같이 구현
+            return Center(child: Text("데이터 오류"));
+          };
+          if (snapshot.hasData) {
+            return _makeDataList(snapshot.data);
+          }
 
-  Widget _bottomNavigationBarwidget(){
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      onTap: (int index){
-        print(index);
-        setState(() {
-          _currentPageIndex = index;
-        });
-      },
-        selectedFontSize: 12,
-        currentIndex: _currentPageIndex,
-        selectedItemColor: Colors.red,
-        items: [
-          _bottomNavigationBarItem("home", "홈"),
-          _bottomNavigationBarItem("notes", "동네생활"),
-          _bottomNavigationBarItem("location", "내 근처"),
-          _bottomNavigationBarItem("chat", "채팅"),
-          _bottomNavigationBarItem("user", "나의 당근"),
-        ]);
+          return Center(child: Text(" 텅 "));
+        }
+    );
   }
 
   @override
@@ -358,7 +211,9 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: _appbarWidget(),
       body: _bodyWidget(),
-      bottomNavigationBar: _bottomNavigationBarwidget(),
     );
   }
 }
+
+// return ListView.separated(
+//   // 아이템 사이사이
