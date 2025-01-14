@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carrot_market_sample/components/manor_temperature_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class DetailContentView extends StatefulWidget {
   Map<String, String> data;
@@ -11,7 +12,7 @@ class DetailContentView extends StatefulWidget {
   State<DetailContentView> createState() => _DetailContentViewState();
 }
 
-class _DetailContentViewState extends State<DetailContentView> {
+class _DetailContentViewState extends State<DetailContentView> with SingleTickerProviderStateMixin{
   Size? size;
   late List<String> imgList = [
     widget.data["image"] as String,
@@ -21,18 +22,45 @@ class _DetailContentViewState extends State<DetailContentView> {
     widget.data["image"] as String,
   ];
   late int _current = 0;
+  ScrollController _controller = ScrollController();
+  double scrollpositionToAlpha =0;
+  late AnimationController _animationController;
+  late Animation<Color?> _colorTween;
 
   @override
   void initState() {
     super.initState();
-    imgList = [
-      widget.data["image"] as String,
-      widget.data["image"] as String,
-      widget.data["image"] as String,
-      widget.data["image"] as String,
-      widget.data["image"] as String,
-    ];
-    _current = 0;
+    _animationController = AnimationController(vsync: this,duration: const Duration(milliseconds: 500),); // 멤버 변수로 초기화
+    _colorTween = ColorTween(begin: Colors.white, end: Colors.black).animate(_animationController); // 멤버 변수로 초기화
+
+    _controller.addListener((){
+      // print("When Scroll starts this sentence is logged ${_controller.offset}" );
+      setState(() {
+        if (_controller.offset > 255) {
+          scrollpositionToAlpha = 255;
+          print(scrollpositionToAlpha);
+        } else{
+          scrollpositionToAlpha = _controller.offset;
+          print(scrollpositionToAlpha);
+        }
+        _animationController.value = scrollpositionToAlpha/255;
+
+      });
+    });
+    // imgList = [
+    //   widget.data["image"] as String,
+    //   widget.data["image"] as String,
+    //   widget.data["image"] as String,
+    //   widget.data["image"] as String,
+    //   widget.data["image"] as String,
+    // ];
+    // _current = 0;
+  }
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -51,31 +79,36 @@ class _DetailContentViewState extends State<DetailContentView> {
     );
   }
 
+  Widget _makeIcon(IconData icon){
+    return AnimatedBuilder(
+        animation: _colorTween, builder: (context, child) => Icon(icon, color: _colorTween.value,)
+    );
+  }
+
   @override
   PreferredSizeWidget _appbarWidget() {
     return AppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white.withAlpha(scrollpositionToAlpha.toInt()), // 0~255 사이로 세팅
       elevation: 0,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: AnimatedBuilder(animation: _colorTween, builder: (context, child) => Icon(Icons.arrow_back, color: _colorTween.value,)),
         color: Colors.white,
         onPressed: () {
           Navigator.pop(context);
         },
+
       ),
+
       actions: [
+
+
+
         IconButton(
             onPressed: () {},
-            icon: Icon(
-              Icons.share,
-              color: Colors.white,
-            )),
+            icon: _makeIcon(Icons.share),),
         IconButton(
             onPressed: () {},
-            icon: Icon(
-              Icons.more_vert,
-              color: Colors.white,
-            )),
+            icon: _makeIcon(Icons.more_vert),),
       ],
     );
   }
@@ -215,7 +248,8 @@ class _DetailContentViewState extends State<DetailContentView> {
   @override
   Widget _bodyWidget() {
     return CustomScrollView(
-      slivers: [
+      controller: _controller
+      ,slivers: [
         SliverList(
             delegate: SliverChildListDelegate([
           _makeSliderImage(),
@@ -233,8 +267,9 @@ class _DetailContentViewState extends State<DetailContentView> {
             delegate: SliverChildListDelegate(List.generate(21, (index) {
               return Container(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch, // 제목 금액 좌측 정렬용
-                   children: [
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // 제목 금액 좌측 정렬용
+                  children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
@@ -242,8 +277,15 @@ class _DetailContentViewState extends State<DetailContentView> {
                         color: Colors.grey,
                       ),
                     ),
-                    Text("상품 제목", style: TextStyle(fontSize: 14),),
-                    Text("금액", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                    Text(
+                      "상품 제목",
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    Text(
+                      "금액",
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
               );
@@ -256,9 +298,57 @@ class _DetailContentViewState extends State<DetailContentView> {
 
   Widget _bottomBarWidget() {
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       width: size?.width,
       height: 55,
-      color: Colors.red,
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              print("관심상품 이벤트 발생");
+            },
+            child: SvgPicture.asset("assets/svg/heart_off.svg",
+                width: 25, height: 25),
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 15, right: 10),
+            width: 1,
+            height: 40,
+            color: Colors.black.withOpacity(0.3),
+          ),
+          Column(
+            children: [
+              Text(
+                widget.data["price"]!,
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "가격 제안 불가",
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              )
+            ],
+          ),
+          Expanded(
+              child: Row(
+                // 컨텐츠 영역 만큼 잡히게 됨
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),color: Color(0xfff08f4f),), // 색깔은 Decoration 안에 넣어야 함
+                child: Text(
+                  "채팅으로 거래하기",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ))
+        ],
+      ),
     );
   }
 

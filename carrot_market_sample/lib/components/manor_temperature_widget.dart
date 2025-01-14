@@ -44,7 +44,6 @@ class ManorTemperature extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,// 온도하고 상태바 아이콘 끝으로 설정
             children: [
               makeTempLabelAndBar(),
-              makeTempLabelAndBar(),
               SizedBox(width: 7),
               _makeTempToCharactorIcon(),
             ],
