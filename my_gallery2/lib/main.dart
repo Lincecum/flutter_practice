@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// image_picker 사용
 class MyGalleryApp extends StatefulWidget {
   const MyGalleryApp({Key? key}) : super(key: key);
 
@@ -31,7 +32,7 @@ class MyGalleryApp extends StatefulWidget {
 
 class _MyGalleryAppState extends State<MyGalleryApp> {
   final ImagePicker _picker = ImagePicker();
-  List<XFile>? images;
+  List<XFile>? images; // ImagePicker가 받는 파일
   int currentPage = 0;
   final pageController = PageController();
 
@@ -43,9 +44,9 @@ class _MyGalleryAppState extends State<MyGalleryApp> {
   }
 
   Future<void> loadImages() async {
-    images = await _picker.pickMultiImage();
+    images = await _picker.pickMultiImage(); // 여러 이미지 가져오기
     if (images != null) {
-      Timer.periodic(const Duration(seconds: 5), (timer) {
+      Timer.periodic(const Duration(seconds: 5), (timer) {// 5초마다
         currentPage++;
         if (currentPage > images!.length - 1) {
           currentPage = 0;

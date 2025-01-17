@@ -26,7 +26,10 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   }
 
   void _start(){
-    _timer = Timer.periodic(const Duration(milliseconds : 10 ), (timer){
+    // Timer 지정된 시간마다 실행하게 함
+    _timer = Timer.periodic(const Duration(milliseconds : 10 ),
+        // 몇초마다 실행할지 진행
+        (timer){
       setState(() {
         _time++;
       });
@@ -46,14 +49,14 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   }
   @override
   void dispose() {
-    _timer?.cancel();
+    _timer?.cancel(); // 타이머가 살아있다면 캔슬
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     int sec = _time ~/ 100;
-    String hundredth = '${_time % 100}'.padLeft(2, '0');
+    String hundredth = '${_time % 100}'.padLeft(2, '0'); // 앞자리에 0 추가
     return Scaffold(
       appBar: AppBar(
         title: const Text('Stopwatch'),
@@ -78,12 +81,12 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
           SizedBox(
             width : 100,
             height: 200,
-            child : ListView(
+            child : ListView( // Scroll되도록 함
               children: _lapTimes.map((time) => Center(child: Text(time))).toList(),
 
             ),
           ),
-          const Spacer(),
+          const Spacer(), // 빈 공간을 차지해서 밑으로 내리는 위젯
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

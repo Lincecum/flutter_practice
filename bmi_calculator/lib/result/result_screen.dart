@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ResultScreen extends StatelessWidget {
-  final double height;
+  final double height;// 항상 값이 생성되어야 함
   final double weight;
 
   const ResultScreen({
@@ -48,7 +48,7 @@ class ResultScreen extends StatelessWidget {
         ),
       body: Center(
         child:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center, // 상하
           children: [
             Text(_calcBmi(bmi), style: TextStyle(fontSize: 36),),
             _buildIcon(bmi)

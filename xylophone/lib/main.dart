@@ -91,10 +91,10 @@ class _XylophoneAppState extends State<XylophoneApp> {
       body: _isLoading
       ? const Center(child: CircularProgressIndicator(),)
       : Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 좌우 간격 조종
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 16.0),// 상하만 적용이 됨
             child: gunban('도', Colors.lightBlue, _soundIds[0]),
           ),
           Padding(
@@ -131,7 +131,7 @@ class _XylophoneAppState extends State<XylophoneApp> {
   }
 
   Widget gunban(String text, Color color, int soundId) {
-    return GestureDetector(
+    return GestureDetector(// 클릭이 됐을 때
       onTap: (){
         pool.play(soundId);
       },
