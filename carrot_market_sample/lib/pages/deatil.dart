@@ -3,6 +3,8 @@ import 'package:carrot_market_sample/components/manor_temperature_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../repository/contents_repository.dart';
+
 class DetailContentView extends StatefulWidget {
   Map<String, String> data;
 
@@ -23,13 +25,18 @@ class _DetailContentViewState extends State<DetailContentView> with SingleTicker
   ];
   late int _current = 0;
   ScrollController _controller = ScrollController();
+  ContentsRepository contentsRepository = ContentsRepository();
   double scrollpositionToAlpha =0;
+
   late AnimationController _animationController;
   late Animation<Color?> _colorTween;
+  bool isMyFavoriteContent = false;
+  // final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    contentsRepository = ContentsRepository();
     _animationController = AnimationController(vsync: this,duration: const Duration(milliseconds: 500),); // 멤버 변수로 초기화
     _colorTween = ColorTween(begin: Colors.white, end: Colors.black).animate(_animationController); // 멤버 변수로 초기화
 
@@ -44,18 +51,18 @@ class _DetailContentViewState extends State<DetailContentView> with SingleTicker
           print(scrollpositionToAlpha);
         }
         _animationController.value = scrollpositionToAlpha/255;
-
       });
     });
-    // imgList = [
-    //   widget.data["image"] as String,
-    //   widget.data["image"] as String,
-    //   widget.data["image"] as String,
-    //   widget.data["image"] as String,
-    //   widget.data["image"] as String,
-    // ];
-    // _current = 0;
+    _loadMyFavoriteContentState();
   }
+
+  _loadMyFavoriteContentState() async{
+    bool isFavorite = await contentsRepository.isMyFavoriteContents(widget.data["cid"]!); // 상품 매번 다시 들어갈때, 지금 보는 컨텐츠가 내가 좋아하는 컨텐츠인지 확인하는 내용
+    setState(() {
+      isMyFavoriteContent = isFavorite;
+    });
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -304,11 +311,29 @@ class _DetailContentViewState extends State<DetailContentView> with SingleTicker
       child: Row(
         children: [
           GestureDetector(
-            onTap: () {
-              print("관심상품 이벤트 발생");
+            onTap: () async {
+              if (isMyFavoriteContent) {
+                await contentsRepository.deleteMyFavoriteContent(widget.data["cid"] as String);
+              } else {
+                await contentsRepository.addMyFavoriteContent(widget.data);
+              }
+              setState(() {
+                isMyFavoriteContent = !isMyFavoriteContent;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar( //scaffoldKey FO에 따라 코드 변경
+                duration: Duration(milliseconds: 1000),
+                content: Text(
+                    isMyFavoriteContent ? "관심목록에 추가됐어요." : "관심목록에서 제거됐어요."),
+              ));
             },
-            child: SvgPicture.asset("assets/svg/heart_off.svg",
-                width: 25, height: 25),
+            child: SvgPicture.asset(
+              isMyFavoriteContent
+                  ? "assets/svg/heart_on.svg"
+                  : "assets/svg/heart_off.svg",
+              width: 20,
+              height: 20,
+              color: Color(0xfff08f4f),
+            ),
           ),
           Container(
             margin: const EdgeInsets.only(left: 15, right: 10),

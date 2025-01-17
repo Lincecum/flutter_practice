@@ -1,16 +1,4 @@
 # carrot_market_sample
+https://www.youtube.com/watch?v=2EUoSXbGQjo&list=PLgRxBCVPaZ_3R0h7mCkLJ1RKh7XRvoZdF&index=11
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 1 ~ 15강 까지 수강, Flutter 버전 및 기타 오류사항은 변경하여 진행

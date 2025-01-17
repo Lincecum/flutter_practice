@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
+import '../utils/widgets.dart';
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -94,91 +96,92 @@ class _HomeState extends State<Home> {
       ],
     );
   }
+  //
+  // Widget _makeDataList(List<Map<String,String>> datas) {
+  //   return ListView.separated(
+  //     padding: const EdgeInsets.symmetric(horizontal: 11),
+  //     itemBuilder: (BuildContext _context, int index) {
+  //       return GestureDetector(
+  //         onTap: (){
+  //           Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+  //             return DetailContentView(
+  //               data: datas[index],
+  //             );
+  //           }));
+  //           print(datas[index]["title"]);
+  //         },
+  //         child: Container(
+  //             padding: const EdgeInsets.symmetric(vertical: 11),
+  //             child: Row(
+  //               children: [
+  //                 ClipRRect(
+  //                   borderRadius: BorderRadius.all(Radius.circular(30)),
+  //                   child: Hero(
+  //                     tag: datas[index]["cid"]!,
+  //                     child: Image.asset(
+  //                       datas[index]["image"]!,
+  //                       width: 100,
+  //                       height: 100,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Expanded(
+  //                   child: Container(
+  //                     height: 100,
+  //                     padding: const EdgeInsets.only(left: 20),
+  //                     child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         Text(
+  //                           datas[index]["title"]!,
+  //                           overflow: TextOverflow.ellipsis,
+  //                           style: TextStyle(fontSize: 15),
+  //                         ),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         Text(
+  //                           datas[index]["location"]!,
+  //                           style: TextStyle(
+  //                               fontSize: 12,
+  //                               color: Colors.black.withOpacity(0.3)),
+  //                         ),
+  //                         SizedBox(
+  //                           height: 5,
+  //                         ),
+  //                         Text(
+  //                             DataUtils.calcStringToWon(datas[index]["price"]!),
+  //                             style: TextStyle(fontWeight: FontWeight.w500)),
+  //                         Expanded(
+  //                           child: Row(
+  //                             mainAxisAlignment: MainAxisAlignment.end,
+  //                             crossAxisAlignment: CrossAxisAlignment.end,
+  //                             children: [
+  //                               SvgPicture.asset(
+  //                                 "assets/svg/heart_off.svg",
+  //                                 width: 13,
+  //                                 height: 13,
+  //                               ),
+  //                               SizedBox(width: 5),
+  //                               Text(datas[index]["likes"]!),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 )
+  //               ],
+  //             )),
+  //       );
+  //     },
+  //     separatorBuilder: (BuildContext _context, int index) {
+  //       return Container(height: 1, color: Colors.black);
+  //     },
+  //     itemCount: datas.length, // itemcount를 데이터의 길이에 맞게 설정
+  //   );
+  // }
 
-  Widget _makeDataList(List<Map<String,String>> datas) {
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 11),
-      itemBuilder: (BuildContext _context, int index) {
-        return GestureDetector(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-              return DetailContentView(
-                data: datas[index],
-              );
-            }));
-            print(datas[index]["title"]);
-          },
-          child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 11),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
-                    child: Hero(
-                      tag: datas[index]["cid"]!,
-                      child: Image.asset(
-                        datas[index]["image"]!,
-                        width: 100,
-                        height: 100,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      height: 100,
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            datas[index]["title"]!,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 15),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            datas[index]["location"]!,
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black.withOpacity(0.3)),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                              DataUtils.calcStringToWon(datas[index]["price"]!),
-                              style: TextStyle(fontWeight: FontWeight.w500)),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                SvgPicture.asset(
-                                  "assets/svg/heart_off.svg",
-                                  width: 13,
-                                  height: 13,
-                                ),
-                                SizedBox(width: 5),
-                                Text(datas[index]["likes"]!),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              )),
-        );
-      },
-      separatorBuilder: (BuildContext _context, int index) {
-        return Container(height: 1, color: Colors.black);
-      },
-      itemCount: datas.length, // itemcount를 데이터의 길이에 맞게 설정
-    );
-  }
   Future<List<Map<String, String>>> _loadContent() async {
     // ContentsRepository의 메서드가 Future로 데이터를 반환해야 함
     return await contentsRepository.loadContentsFromLocation(currentLocation);
@@ -195,7 +198,10 @@ class _HomeState extends State<Home> {
             return Center(child: Text("데이터 오류"));
           };
           if (snapshot.hasData) {
-            return _makeDataList(snapshot.data);
+            return makeDataList(
+              context: context,
+              datas: snapshot.data,
+            );
           }
 
           return Center(child: Text(" 텅 "));
